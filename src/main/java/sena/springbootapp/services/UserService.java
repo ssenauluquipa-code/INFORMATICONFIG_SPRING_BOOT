@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import sena.springbootapp.customexception.UserNotFoundException;
 import sena.springbootapp.model.User;
 import sena.springbootapp.model.UserPatch;
 
@@ -25,12 +27,12 @@ public class UserService {
 	public List<User> getUsers(){
 		return USERS;
 	}
-	
+	//y ponermos una excepcion si no hay un id
 	public User findById(int id){
 		return USERS.stream()
 				.filter(u -> u.id() == id)
 				.findFirst()
-				.orElse(null);
+				.orElseThrow(()->new UserNotFoundException("User not found","User could not find in the ArrayList", HttpStatus.NOT_FOUND));
 	}
 	
 	public List<User> findName(String name){

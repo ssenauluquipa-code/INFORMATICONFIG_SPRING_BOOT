@@ -29,44 +29,44 @@ public class UserController {
 		this.userService = userService;
 		// TODO Auto-generated constructor stub
 	}
-	@GetMapping()
+	@GetMapping("/getUsers")
 	public ResponseEntity<List<User>> getUsers(){
 		List<User> users = this.userService.getUsers();
 		return ResponseEntity.ok(users);
 	}
 	
 //filtro con rutas
-	@GetMapping("/{id}")
+	@GetMapping("/getUserById/{id}")
 	public ResponseEntity<User> getUserById(@PathVariable int id){
-		User userFind = this.userService.findById(id);
-		return ResponseEntity.ok(userFind);
+			User userFind = this.userService.findById(id);
+			return ResponseEntity.ok(userFind);			
 	}
 	//filtro con query paa mostrar una lista de usuario mediante nombre
-	@GetMapping("search")
+	@GetMapping("/getUserByName/search")
 	public ResponseEntity<List<User>> getUserByName(@RequestParam(required = true) String name){
 		var user = this.userService.findName(name);
 		return ResponseEntity.ok(user);
 	}
 	//para guardar datos
-	@PostMapping()
+	@PostMapping("/createUsers")
 	public ResponseEntity<User> createUsers(@RequestBody User user){
 		var users = this.userService.createUsers(user);
 		return ResponseEntity.ok(users);
 	}
 	//para editar un valor especifico
-	@PutMapping("/{id}")
+	@PutMapping("/updateUser/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user){
 		var users = this.userService.updateUsers(id,user);
 		return ResponseEntity.ok(users);
 	}
 	
-	@PatchMapping("/{id}")
+	@PatchMapping("/pathUsers/{id}")
 	public ResponseEntity<User> pathUsers(@PathVariable int id, @RequestBody UserPatch userpatch){
 		var userResult = this.userService.patchUsers(id, userpatch);
 		return ResponseEntity.ok(userResult);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/deleted/{id}")
 	public ResponseEntity<User> deleted(@PathVariable int id){
 		var userResult = this.userService.deleted(id);
 		return ResponseEntity.ok(userResult);
