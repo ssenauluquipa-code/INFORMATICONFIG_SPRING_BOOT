@@ -9,7 +9,7 @@ FROM openjdk:21-jdk-slim
 WORKDIR /app
 
 # Copia el JAR generado (¡con el nombre correcto y escapando el espacio!)
-COPY --from=build /app/target/sena.SpringbootApp-version\ 1.jar app.jar
+COPY --from=build /app/target/sena.SpringbootApp-1.0.0.jar app.jar
 
 EXPOSE 8080
 

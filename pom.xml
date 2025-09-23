@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.SpringBootApp</groupId>
 	<artifactId>sena.SpringbootApp</artifactId>
-	<version>version 1</version>
+	<version>1.0.0</version>
 	<name>sena.SpringbootApp</name>
 	<description>JAVA SPRING BOOT COURSE FROM SCRATCH</description>
 	<url/>
