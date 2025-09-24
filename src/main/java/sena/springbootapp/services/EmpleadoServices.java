@@ -2,8 +2,12 @@ package sena.springbootapp.services;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import sena.springbootapp.customexception.UserNotFoundException;
 import sena.springbootapp.model.Empleado;
 
 @Service
@@ -49,6 +53,43 @@ public class EmpleadoServices {
 
     public List<Empleado> getEmpleados(){
         return empleados_LIST;
+    }
+    
+    public Empleado findById(int id) {
+    	return empleados_LIST.stream()
+    			.filter(e -> e.EmployeeId() == id)
+    			.findFirst()
+    			.orElseThrow(() -> new UserNotFoundException("User not found","User could not find in the ArrayList", HttpStatus.NOT_FOUND));
+    }
+    public List<Empleado> findName(String Name){
+    	return empleados_LIST.stream()
+    			.filter(e -> Name.equals(e.FirstName()))
+    			.toList();
+    }
+    //crear
+    public synchronized Empleado createEmpleado(Empleado empleado) {
+    	empleados_LIST.add(empleado);
+    	return empleado;
+    }
+    //editar
+    public synchronized Empleado updateEmpleado(int id, Empleado empleado) {
+    	empleados_LIST.stream().filter(e -> e.EmployeeId() == id)
+    	.findFirst()
+    	.ifPresent(e ->{
+    		empleados_LIST.set(empleados_LIST.indexOf(e), empleado);
+    	});
+    	return empleado;
+    }
+    public synchronized Empleado delete(int id) {
+    	AtomicReference<Empleado> empleado = new AtomicReference<>();
+    	empleados_LIST.stream()
+    	.filter(e -> e.EmployeeId() == id )
+    	.findFirst()
+    	.ifPresent(e ->{
+    		empleados_LIST.remove(e);
+    		empleado.set(e);
+    	});
+    	return empleado.get();
     }
 
 }
