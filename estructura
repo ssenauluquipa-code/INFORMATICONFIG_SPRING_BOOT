@@ -1,0 +1,68 @@
+estructura del sistema actual con datos locales
+com.informaticonfig
+├── InformaticonfigApplication.java
+├── controller
+│   └── ClienteController.java
+├── service
+│   └── ClienteService.java
+└── entity
+    └── Cliente.java
+ 
+ ✅ Ideal para tu caso actual (como el Empleado que ya tienes) 
+
+Paso 1: Crea los paquetes base
+Dentro de com.informaticonfig:
+
+	entity
+	service
+	controller
+Paso 2: Crea las clases (en este orden)
+	entity/Cliente.java
+		→ Define la estructura de tus datos.
+	service/ClienteService.java
+		→ Usa la clase Cliente y maneja la lógica (lista en memoria, métodos CRUD).
+	controller/ClienteController.java
+	→ Usa el servicio y expone los endpoints REST.
+✅ Resultado: API funcional sin base de datos.
+ 
+    
+ y este deberia ser cuando se agregue una base de datos
+ 
+ com.informaticonfig
+├── InformaticonfigApplication.java
+├── controller
+│   └── UsuarioController.java
+├── service
+│   └── UsuarioService.java
+├── repository
+│   └── UsuarioRepository.java
+├── entity
+│   └── Usuario.java
+└── dto
+    └── UsuarioDTO.java
+    
+    Para cuando ya tengas conexión a una base de datos 
+
+Paso 1: Asegúrate de tener las dependencias en pom.xml
+	spring-boot-starter-data-jpa
+		Driver de tu base de datos (ej. mysql-connector-java o h2)
+Paso 2: Crea los paquetes base
+	Dentro de com.informaticonfig:
+
+	entity
+	dto
+	repository
+	service
+	controller
+Paso 3: Crea las clases (en este orden)
+	entity/Usuario.java
+		→ Clase con anotaciones JPA (@Entity, @Id, etc.).
+	dto/UsuarioDTO.java
+		→ Clase simple para transferir solo los datos necesarios (sin campos sensibles).
+	repository/UsuarioRepository.java
+		→ Interfaz que extiende JpaRepository<Usuario, Long>.
+	service/UsuarioService.java
+		→ Usa el repositorio y hace el mapeo entre Usuario y UsuarioDTO.
+	controller/UsuarioController.java
+		→ Usa el servicio y trabaja solo con DTOs en los endpoints.
+✅ Resultado: API segura, escalable y lista para producción.
