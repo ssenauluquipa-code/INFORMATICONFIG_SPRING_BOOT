@@ -5,14 +5,12 @@ import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,39 +22,37 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig {
 	
-	// ✅ 1. UserDetailsService (usuarios en memoria)
+	// ✅ PasswordEncoder simple y seguro
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    // ✅ Usuarios en memoria con contraseñas codificadas
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails admin = User.withUsername("admin")
-                .password("{noop}admin123")
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password(passwordEncoder().encode("admin123"))
                 .roles("ADMIN")
                 .build();
 
-        UserDetails user = User.withUsername("user")
-                .password("{noop}user123")
+        UserDetails user = User.builder()
+                .username("user")
+                .password(passwordEncoder().encode("user123"))
                 .roles("USER")
                 .build();
 
         return new InMemoryUserDetailsManager(admin, user);
     }
-
-    // ✅ 2. AuthenticationManager (¡ESTO ES LO QUE FALTABA!)
+    // ✅ ¡ESTE ES EL MÉTODO QUE FALTABA!
     @Bean
-    public AuthenticationManager authenticationManager() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService());
-        provider.setPasswordEncoder(passwordEncoder()); // Opcional si usas {noop}
-        return new ProviderManager(provider);
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
-    // ✅ 3. PasswordEncoder (opcional si usas {noop}, pero bueno tenerlo)
-    @Bean
-    public org.springframework.security.crypto.password.PasswordEncoder passwordEncoder() {
-        return org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
-        // En producción, usa: new BCryptPasswordEncoder()
-    }
-
-    // ✅ 4. Configuración de seguridad
+    // ✅ Configuración de seguridad (Spring Security 6.1+)
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -71,7 +67,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ✅ 5. Configuración de CORS
+    // ✅ CORS simple
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
