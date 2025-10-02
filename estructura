@@ -24,6 +24,16 @@ Paso 2: Crea las clases (en este orden)
 	controller/ClienteController.java
 	→ Usa el servicio y expone los endpoints REST.
 ✅ Resultado: API funcional sin base de datos.
+
+se agrego estos para la parte de login
+├── config
+│   └── SecurityConfig.java          ← Configuración de Spring Security
+├── controller
+│   └── AuthController.java          ← Endpoint de login/logout
+├── dto
+│   ├── LoginRequest.java            ← Datos de entrada (usuario/contraseña)
+│   └── AuthResponse.java            ← Respuesta (éxito/error)
+└── (tus otros paquetes: controller, service, entity...)
  
     
  y este deberia ser cuando se agregue una base de datos
