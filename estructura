@@ -76,3 +76,14 @@ Paso 3: Crea las clases (en este orden)
 	controller/UsuarioController.java
 		→ Usa el servicio y trabaja solo con DTOs en los endpoints.
 ✅ Resultado: API segura, escalable y lista para producción.
+
+
+# Estructura del Proyecto RRHH
+
+- **config/** → configuración general (CORS, Beans, Swagger, etc.)
+- **controller/** → controladores REST
+- **dto/** → objetos de transferencia de datos entre capa web y servicio
+- **entity/** → entidades JPA (mapeo a base de datos)
+- **repository/** → interfaces que extienden JpaRepository
+- **security/** → clases de autenticación/autorización
+- **service/** → lógica de negocio
